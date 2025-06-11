@@ -30,7 +30,7 @@ ollama run mistral
 
 ### Lancement de l'application
 ```bash
-streamlit run app.py
+streamlit run rssi.py
 ```
 
 L'application sera accessible sur [http://localhost:8501](http://localhost:8501)
