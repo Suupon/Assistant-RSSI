@@ -1,70 +1,96 @@
-# 🛡️ Assistant RSSI Virtuel
+# 🛡️Assistant RSSI Virtuel
 
-Assistant RSSI Virtuel est une application web interactive pour répondre à toutes vos questions liées à la cybersécurité, synthétiser des documents PDF, faire de la veille CERT-FR, gérer une FAQ et enrichir votre base documentaire interne.
+Assistant RSSI Virtuel est une application web interactive basée sur Streamlit et Ollama pour répondre à toutes vos questions liées à la cybersécurité, synthétiser des documents PDF, faire de la veille CERT-FR, gérer une FAQ et enrichir votre base documentaire interne.
 
-## Fonctionnalités principales
-- **Assistant intelligent** : Posez des questions sur la cybersécurité, les normes, les incidents, etc. L'assistant s'appuie sur vos documents PDF internes (RAG) et ses connaissances générales.
-- **Synthèse de documents** : Téléversez un PDF (rapport, guide, bulletin...) et obtenez un résumé clair et structuré.
-- **Veille CERT-FR** : Consultez les dernières alertes du CERT-FR et obtenez un résumé automatique de chaque alerte.
-- **FAQ cybersécurité** : Accédez à une liste de questions fréquentes et obtenez des réponses instantanées.
-- **Ajout de documents** : Ajoutez facilement vos propres PDF à la base documentaire.
-- **Historique** : Retrouvez tous vos échanges et exportez-les en JSON.
+---
 
-## Installation
+## 🚀 Fonctionnalités principales
 
-### Prérequis
-- Python 3.8+
-- [Ollama](https://ollama.com/) (pour le LLM local, ex : mistral)
+* **Assistant intelligent** : Dialogue en langage naturel sur la cybersécurité, basé sur vos documents internes (RAG) et un modèle LLM local.
+* **Synthèse de documents PDF** : Résumés automatiques de rapports ou bulletins techniques.
+* **Veille CERT-FR** : Intégration des flux RSS officiels avec résumé automatique.
+* **Historique des échanges** : Sauvegarde automatique dans un fichier `.jsonl`.
+* **Ajout de documents** : Glissez vos PDF dans `docs/` pour enrichir la base documentaire.
+* **Interface légère** : Accessible depuis un navigateur local via Streamlit.
 
-### Installation des dépendances
-```bash
-pip install -r requirements.txt
-```
+---
 
-### Lancement du serveur LLM (Ollama)
-Assurez-vous qu'Ollama est installé et lancé sur votre machine :
-```bash
-ollama serve
-ollama run mistral
-```
+## 🐳 Installation via Docker
 
-### Lancement de l'application
-```bash
-streamlit run rssi.py
-```
+### ⚙️ Prérequis
 
-L'application sera accessible sur [http://localhost:8501](http://localhost:8501)
+* Docker installé sur votre machine
+* Modèle Ollama compatible (ex : `mistral`) téléchargé automatiquement
 
-## Structure du projet
+### 📂 Arborescence simplifiée du projet
+
 ```
 / (racine)
-│
-├── app.py                  # Interface Streamlit (front-end)
-├── backend/                # Fonctions métier et utilitaires
-│   ├── pdf_utils.py        # Lecture et découpage des PDF
-│   ├── faiss_utils.py      # Indexation et recherche vectorielle
-│   ├── llm_utils.py        # Appel au LLM (Ollama)
-│   ├── rss_utils.py        # Récupération des alertes CERT-FR
-│   └── history_utils.py    # Gestion de l'historique
-│
-├── docs/                   # Dossier pour vos PDF internes
-├── conversations.jsonl     # Historique des échanges
+├── rssi.py                 # Interface Streamlit (frontend)
+├── backend/                # Fonctions métier
+│   ├── pdf_utils.py
+│   ├── faiss_utils.py
+│   ├── llm_utils.py
+│   ├── rss_utils.py
+│   └── history_utils.py
+├── docs/                   # PDF internes à indexer
+├── conversations.jsonl     # Historique de l'assistant
 ├── requirements.txt        # Dépendances Python
+├── start.sh                # Script de lancement (Ollama + Streamlit)
+├── Dockerfile              # Image Docker complète
 └── README.md               # Ce fichier
 ```
 
-## Conseils d'utilisation
-- Ajoutez vos documents PDF dans le dossier `docs/` pour enrichir les réponses de l'assistant.
-- Si aucun document n'est présent, l'assistant répondra uniquement avec ses connaissances générales.
-- L'historique est sauvegardé automatiquement et exportable.
+### ▶️ Démarrage (une seule commande)
 
-## Dépendances principales
-- streamlit
-- requests
-- PyMuPDF
-- sentence-transformers
-- faiss-cpu
-- feedparser
+```bash
+docker build -t assistant-rssi .
+docker run -p 8501:8501 assistant-rssi
+```
 
-## Licence
-Projet éducatif et démonstratif. À adapter selon vos besoins professionnels. 
+> 💡 Le script `start.sh` lance automatiquement `ollama serve`, charge le modèle `mistral`, puis démarre l'application Streamlit.
+
+L'application sera accessible à l’adresse : [http://localhost:8501](http://localhost:8501)
+
+---
+
+## 🔧 Si vous utilisez sans Docker (optionnel)
+
+### ⚙️ Prérequis
+
+* Python 3.8+
+* [Ollama](https://ollama.com/) installé manuellement sur votre machine
+
+### ▶️ Installation manuelle
+
+```bash
+pip install -r requirements.txt
+ollama serve &
+ollama run mistral &
+streamlit run rssi.py
+```
+
+---
+
+## 📦 Dépendances principales
+
+* `streamlit`
+* `requests`
+* `PyMuPDF`
+* `sentence-transformers`
+* `faiss-cpu`
+* `feedparser`
+
+---
+
+## 🧐 Conseils
+
+* Placez vos fichiers PDF dans `docs/` pour que l’assistant les prenne en compte.
+* L’historique de chaque échange est stocké dans `conversations.jsonl`.
+* L’ouverture du navigateur n’est pas automatique dans Docker, mais vous pouvez le faire manuellement : `open http://localhost:8501` sur Mac.
+
+---
+
+## 📄 Licence
+
+Projet éducatif et démonstratif. À adapter selon vos besoins professionnels.
