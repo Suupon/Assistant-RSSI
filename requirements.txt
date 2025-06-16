@@ -1,0 +1,8 @@
+streamlit
+requests
+PyMuPDF
+sentence-transformers
+faiss-cpu
+feedparser
+
+
